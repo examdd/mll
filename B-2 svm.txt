@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, precision_score, recall_score
+
+df=pd.read_csv("C:/Users/pandu kumar/Desktop/mllab/svm.csv")
+X = df.drop("Type", axis = 1)
+y = df["Type"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3)
+model = SVC()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+print("Accuracy score :", accuracy_score(y_test, y_pred))
+
+print("Confusion matrix \n", confusion_matrix(y_test, y_pred))
+print("Classification Report \n", classification_report(y_test, y_pred))
+
+model1 = SVC(kernel = 'sigmoid', gamma = 0.001)
+model2 = SVC(kernel = 'poly', degree = 3)
+model3 = SVC(kernel = 'rbf')
+
+model1.fit(X_train, y_train)
+model2.fit(X_train, y_train)
+model3.fit(X_train, y_train)
+
+ypred1 = model1.predict(X_test)
+ypred2 = model2.predict(X_test)
+ypred3 = model3.predict(X_test)
+
+print("Accuracy of sigmoid : ",accuracy_score(y_test,ypred1))
+print("Accuracy of polynomial : ",accuracy_score(y_test,ypred2))
+print("Accuracy of rbf : ",accuracy_score(y_test,ypred3))

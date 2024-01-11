@@ -1,0 +1,47 @@
+import pandas as pd 
+import numpy as np
+from copy import deepcopy
+k=2
+X = np.array([[5.9,3.2],
+[4.6,2.9],
+[6.2,2.8],
+[4.7,3.2],
+[5.5,4.2],
+[5.0,3.0],
+[4.9,3.1],
+[6.7,3.1],
+[5.1,3.8],
+[6.0,3.0]
+])
+
+Centroid=np.array([[6.2, 3.2],  # μ1 (red)
+                            [6.6, 3.7],  # μ2 (green)
+                            [6.5, 3.0]   # μ3 (blue)
+                           ])
+
+clusters = np.zeros(len(X))
+Centroid_old=np.zeros(Centroid.shape)
+print(Centroid_old)
+
+def euclidean_dist(a,b,ax=1):
+    return np.linalg.norm(a-b,axis=ax)
+
+error=euclidean_dist(Centroid,Centroid_old,None)
+print(error)
+iter=0
+while error!=0:
+    iter+1
+    for i in range(len(X)):
+        distance=euclidean_dist(X[i],Centroid)
+        cluster=np.argmin(distance)
+        clusters[i]=cluster
+        Centroid_old=deepcopy(Centroid)
+        print(Centroid_old)
+        
+    for p in range(k):
+        point=[X[j] for j in range(len(X)) if clusters[j]==p]
+        Centroid[p]=np.mean(point,axis=0)
+        error=euclidean_dist(Centroid,Centroid_old,None)
+        print(error)
+        print('Data points belong to cluster: ')
+        print(clusters)

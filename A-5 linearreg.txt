@@ -1,0 +1,41 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+df=pd.read_csv('Food-Truck-LineReg.csv')
+df.columns=['X','Y']
+df.head()
+x_mean=df['X'].mean()
+y_mean=df['Y'].mean()
+df['x']=df['X']-x_mean
+df['y']=df['Y']-y_mean
+df['xy']=df['x']*df['y']
+df['x2']=df['x']**2
+df['y2']=df['y']**2
+df.head()
+sum_xy=df['xy'].sum()
+sum_x2=df['x2'].sum()
+sum_y2=df['y2'].sum()
+corr=sum_xy/(sum_x2*sum_y2)**0.5
+def mean(num):
+    sum=0
+    for i in range(len(num)):
+        sum+=i
+    return sum/len(num)
+
+def std(num):
+    n=len(num)
+    sum=0
+    for i in range(len(num)):
+        sum+=(num[i]-mean(num))**2
+    return ((sum/n)**0.5)
+m=(corr*std(df['x'].tolist()))/std(df['y'].tolist())
+c=y_mean-(m*x_mean)
+df['y_pred']=m*df['X']+c
+plt.scatter(df['X'],df['Y'])
+plt.plot(df['X'],df['y_pred'],color='r')
+plt.show()
+SSE=sum((df['Y']-df['y_pred'])**2)
+SSR=sum((df['y_pred']-mean(df['Y']))**2)
+SST=sum((df['Y']-mean(df['Y']))**2)
+R2=SSR/SST
+cost=SSE/len(df)
+print (m,c,SSE,SSR,SST,R2,cost)
